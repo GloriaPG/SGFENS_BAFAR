@@ -348,6 +348,7 @@ public class WSConexionMovil {
         System.out.println("OBJETO PARSEADO" + datosBuro.toString());
         
         //CONSULTAMOS BURÓ
+        
         //ESTABLECEMOS DATOS DE PERSONA
         NombreBC nombre = new NombreBC();
         nombre.setApellidoPaterno(datosBuro.getApellidoPaterno());
@@ -368,14 +369,14 @@ public class WSConexionMovil {
         direc.setEstado(datosBuro.getEstado());
         direc.setCP(datosBuro.getCp());
         
-        //ConsultaBuro consultaBuro = new ConsultaBuro();
-        //RespuestaBC responseBuro = consultaBuro.consultaXML(nombre, direc); 
+        ConsultaBuro consultaBuro = new ConsultaBuro();
+        RespuestaBC responseBuro = consultaBuro.consultaXML(nombre, direc); 
         
                 
          // --- MANEJAMOS RESPUESTA INVÁLIDA DE BURÓ --- (?)
         
         //CREAMOS SGFENS_PROSPECTO_DATOS_CREDITO PARA GUARDAR EN LA BD
-        /***
+        
         PersonaRespBC persona = responseBuro.getPersonas().getPersona().get(0);
         String direccion = persona.getDomicilios().getDomicilio().get(0).getDireccion1();
         String coloniaPoblacion = persona.getDomicilios().getDomicilio().get(0).getColoniaPoblacion();
@@ -387,7 +388,9 @@ public class WSConexionMovil {
         String codigoScore =persona.getScoreBuroCredito().getScoreBC().get(0).getCodigoScore();
         String valorScore = persona.getScoreBuroCredito().getScoreBC().get(0).getValorScore();
         String cuentas = persona.getCuentas().getCuenta().get(0).toString();
-        ***/
+        Date date = new Date();
+        
+        /** TEST Manual
         String direccion = datosBuro.getDireccion();
         String coloniaPoblacion = datosBuro.getColoniaPoblacion();
         String delegacionMunicipio = datosBuro.getDelegacionMunicipio();
@@ -398,9 +401,7 @@ public class WSConexionMovil {
         String codigoScore ="080";
         String valorScore ="08";
         String cuentas = "meh";
-        Date date = new Date();
-        //java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //String currentTime = sdf.format(dt);
+        ***/
         
         //CREAMOS NUESTRO DAO
         SgfensProspectoDatosCreditoDAO spdcDAO = new SgfensProspectoDatosCreditoDAO();
@@ -429,7 +430,6 @@ public class WSConexionMovil {
         
         String jsonResponse = gson.toJson(spdcInstance);
         return jsonResponse;
-        
     }
     
     
