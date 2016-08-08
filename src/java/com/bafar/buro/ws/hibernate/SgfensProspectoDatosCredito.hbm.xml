@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 07-ago-2016 21:11:14 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.bafar.buro.ws.hibernate.SgfensProspectoDatosCredito" table="sgfens_prospecto_datos_credito" catalog="cr_bafar">
+        <id name="idProspectoDatosCredito" type="int">
+            <column name="ID_PROSPECTO_DATOS_CREDITO" />
+            <generator class="assigned" />
+        </id>
+        <property name="idSgfensProspecto" type="int">
+            <column name="ID_SGFENS_PROSPECTO" not-null="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="DIRECCION" length="500" />
+        </property>
+        <property name="coloniaPoblacion" type="string">
+            <column name="COLONIA_POBLACION" length="100" />
+        </property>
+        <property name="delegacionMunicipio" type="string">
+            <column name="DELEGACION_MUNICIPIO" length="100" />
+        </property>
+        <property name="ciudad" type="string">
+            <column name="CIUDAD" length="100" />
+        </property>
+        <property name="estado" type="string">
+            <column name="ESTADO" length="100" />
+        </property>
+        <property name="codigoPostal" type="string">
+            <column name="CODIGO_POSTAL" length="10" />
+        </property>
+        <property name="nombreScore" type="string">
+            <column name="NOMBRE_SCORE" length="100" />
+        </property>
+        <property name="codigoScore" type="string">
+            <column name="CODIGO_SCORE" length="10" />
+        </property>
+        <property name="valorScore" type="string">
+            <column name="VALOR_SCORE" length="10" />
+        </property>
+        <property name="cuentas" type="string">
+            <column name="CUENTAS" length="65535" />
+        </property>
+        <property name="fechaConsulta" type="timestamp">
+            <column name="FECHA_CONSULTA" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

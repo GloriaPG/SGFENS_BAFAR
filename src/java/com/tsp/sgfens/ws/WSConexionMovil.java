@@ -4,6 +4,15 @@
  */
 package com.tsp.sgfens.ws;
 
+import com.bafar.buro.ws.ConsultaBuro;
+import com.bafar.buro.ws.DatosBuro;
+import com.bafar.buro.ws.Direccion;
+import com.bafar.buro.ws.NombreBC;
+import com.bafar.buro.ws.PersonaResp;
+import com.bafar.buro.ws.PersonaRespBC;
+import com.bafar.buro.ws.RespuestaBC;
+import com.bafar.buro.ws.hibernate.SgfensProspectoDatosCredito;
+import com.bafar.buro.ws.hibernate.SgfensProspectoDatosCreditoDAO;
 import com.google.gson.Gson;
 import com.tsp.sgfens.ws.bo.ConsultaWsBO;
 import com.tsp.sgfens.ws.bo.CotizacionWsBO;
@@ -13,6 +22,7 @@ import com.tsp.sgfens.ws.bo.PaquetesWsBO;
 import com.tsp.sgfens.ws.bo.PedidoWsBO;
 import com.tsp.sgfens.ws.request.UsuarioNuevoDtoRequest;
 import com.tsp.sgfens.ws.response.*;
+import java.util.Date;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -320,6 +330,104 @@ public class WSConexionMovil {
         //Transformamos de objeto a formato JSON
         String jsonResponse = gson.toJson(wSResponseInsert);
         
+        return jsonResponse;
+        
+    }
+    
+     @WebMethod(operationName = "insertaActualizaDatosBuroProspecto", action="insertaActualizaDatosBuroProspecto")
+    public String insertaActualizaDatosBuroProspecto(
+            @WebParam(name = "datosBuroProspectoJson") String datosBuroProspectoJson
+            ) {
+        
+        Gson gson = new Gson();
+        
+        System.out.println("METODO: insertaActualizarDatosBuroProspecto \n");
+        System.out.println("REQUEST JSON: \n" + datosBuroProspectoJson);
+        
+        DatosBuro datosBuro = gson.fromJson(datosBuroProspectoJson, DatosBuro.class);
+        System.out.println("OBJETO PARSEADO" + datosBuro.toString());
+        
+        //CONSULTAMOS BURÓ
+        //ESTABLECEMOS DATOS DE PERSONA
+        NombreBC nombre = new NombreBC();
+        nombre.setApellidoPaterno(datosBuro.getApellidoPaterno());
+        nombre.setApellidoMaterno(datosBuro.getApellidoMaterno());
+        if(datosBuro.getSegundoNombre()!= ""){
+          nombre.setSegundoNombre(datosBuro.getSegundoNombre());  
+        }
+        nombre.setPrimerNombre(datosBuro.getPrimerNombre());
+        
+        nombre.setRFC(datosBuro.getRFC());
+
+        //ESTABLECEMOS DIRECCIÓN
+        Direccion  direc = new Direccion();
+        direc.setDireccion1(datosBuro.getDireccion());
+        direc.setColoniaPoblacion(datosBuro.getColoniaPoblacion());
+        direc.setDelegacionMunicipio(datosBuro.getDelegacionMunicipio());
+        direc.setCiudad(datosBuro.getCiudad());
+        direc.setEstado(datosBuro.getEstado());
+        direc.setCP(datosBuro.getCp());
+        
+        //ConsultaBuro consultaBuro = new ConsultaBuro();
+        //RespuestaBC responseBuro = consultaBuro.consultaXML(nombre, direc); 
+        
+                
+         // --- MANEJAMOS RESPUESTA INVÁLIDA DE BURÓ --- (?)
+        
+        //CREAMOS SGFENS_PROSPECTO_DATOS_CREDITO PARA GUARDAR EN LA BD
+        /***
+        PersonaRespBC persona = responseBuro.getPersonas().getPersona().get(0);
+        String direccion = persona.getDomicilios().getDomicilio().get(0).getDireccion1();
+        String coloniaPoblacion = persona.getDomicilios().getDomicilio().get(0).getColoniaPoblacion();
+        String delegacionMunicipio = persona.getDomicilios().getDomicilio().get(0).getDelegacionMunicipio();
+        String ciudad = persona.getDomicilios().getDomicilio().get(0).getCiudad();
+        String estado = persona.getDomicilios().getDomicilio().get(0).getEstado();
+        String codigoPostal = persona.getDomicilios().getDomicilio().get(0).getCP();
+        String nombreScore = persona.getScoreBuroCredito().getScoreBC().get(0).getNombreScore();
+        String codigoScore =persona.getScoreBuroCredito().getScoreBC().get(0).getCodigoScore();
+        String valorScore = persona.getScoreBuroCredito().getScoreBC().get(0).getValorScore();
+        String cuentas = persona.getCuentas().getCuenta().get(0).toString();
+        ***/
+        String direccion = datosBuro.getDireccion();
+        String coloniaPoblacion = datosBuro.getColoniaPoblacion();
+        String delegacionMunicipio = datosBuro.getDelegacionMunicipio();
+        String ciudad = datosBuro.getCiudad();
+        String estado = datosBuro.getEstado();
+        String codigoPostal = datosBuro.getCp();
+        String nombreScore = "xx";
+        String codigoScore ="080";
+        String valorScore ="08";
+        String cuentas = "meh";
+        Date date = new Date();
+        //java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //String currentTime = sdf.format(dt);
+        
+        //CREAMOS NUESTRO DAO
+        SgfensProspectoDatosCreditoDAO spdcDAO = new SgfensProspectoDatosCreditoDAO();
+        
+        //GUARDAMOS/ACTUALIZAMOS EN LA BD
+        SgfensProspectoDatosCredito spdcInstance = new SgfensProspectoDatosCredito();
+        spdcInstance.setIdSgfensProspecto(Integer.valueOf(datosBuro.getProspectoID()));
+        spdcInstance.setDireccion(direccion);
+        spdcInstance.setColoniaPoblacion(coloniaPoblacion);
+        spdcInstance.setDelegacionMunicipio(delegacionMunicipio);
+        spdcInstance.setCiudad(ciudad);
+        spdcInstance.setEstado(estado);
+        spdcInstance.setColoniaPoblacion(coloniaPoblacion);
+        spdcInstance.setNombreScore(nombreScore);
+        spdcInstance.setCodigoScore(codigoScore);
+        spdcInstance.setValorScore(valorScore);
+        spdcInstance.setCuentas(cuentas);
+        spdcInstance.setFechaConsulta(date);
+        int id=Integer.valueOf(datosBuro.getProspectoID());
+        if(spdcDAO.getById(id)!= null) {
+            spdcDAO.update(spdcInstance); 
+        }
+        else {
+            spdcDAO.save(spdcInstance);
+        }
+        
+        String jsonResponse = gson.toJson(spdcInstance);
         return jsonResponse;
         
     }
